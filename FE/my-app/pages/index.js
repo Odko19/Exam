@@ -82,7 +82,7 @@ export default function Home() {
    
          {
           data && data.map((list1,i)=>{
-            return  <div className={styles.flex}><TextField key={i} id="standard-basic"  defaultValue={list1.todoList
+            return  <div className={styles.flex} key={i}><TextField  id="standard-basic"  defaultValue={list1.todoList
             } variant="standard"  sx={{
               '& > :not(style)': { m: 1, width: '39ch' }
              }}/><div className={styles.flex1}><ModeEditIcon/><DeleteIcon/></div></div>
