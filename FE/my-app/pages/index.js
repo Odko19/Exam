@@ -11,7 +11,7 @@ import Modal from '@mui/material/Modal';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { border } from '@mui/system';
-
+import useSWR from "swr";
 
 const style = {
   position: 'absolute',
@@ -32,24 +32,25 @@ export default function Home() {
   const handleClose = () => setOpen(false);
 
 
-  React.useEffect(()=>{
-  axios
-  .get(`http://localhost:3000/v1`,)
-  .then((res) => setList(res.data.data))
-  .catch((err) => console.log(err));
-  },[])
 
-  function handlerAdd(){
-   console.log("hi")
-    
+  const usersApi = "https://odko.ilearn.mn/v1";
+  const fetcher = async (url) =>
+    await axios.get(url).then((res) => res.data.data);
+  const { data, error, mutate } = useSWR(usersApi, fetcher);
+
+  let lengthArr ;
+  for(let i=0; i < data?.length; i++){
+    lengthArr =data.length
   }
 
+
+  console.log(lengthArr)
 
   function handerAdd(e) {
     e.preventDefault();
     // console.log(e.target.task.value);
     axios
-      .post(`http://localhost:3000/v1`, {
+      .post(`https://odko.ilearn.mn/v1`, {
         todoList: e.target.task.value,
        
       })
@@ -65,48 +66,43 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.box}>
-             <h4 className={styles.header1}>My ToDo List </h4>
-         <div>
+        <div >
+           <div>
+           <h4 className={styles.header1}>My ToDo List  <span className={styles.sp}>0/{lengthArr && lengthArr}</span></h4>
+           </div>
+         <div className={styles.box}>
 
          <Box
           component="form"
-           sx={{
-            '& > :not(style)': { m: 1, width: '90%' }, marginBottom:"20px", border:"none"
-           }}
+           
       
            noValidate
            autoComplete="off"
           >
    
          {
-          list && list.map((list1,i)=>{
-            return  <div className={styles.flex}><TextField key={i} id="standard-basic" label={i+1} defaultValue={list1.todoList
-            } variant="standard" /><div><ModeEditIcon/><DeleteIcon/></div></div>
+          data && data.map((list1,i)=>{
+            return  <div className={styles.flex}><TextField key={i} id="standard-basic"  defaultValue={list1.todoList
+            } variant="standard"  sx={{
+              '& > :not(style)': { m: 1, width: '39ch' }
+             }}/><div className={styles.flex1}><ModeEditIcon/><DeleteIcon/></div></div>
           })
          }
          </Box>
-         <Button onClick={handleOpen} variant="contained" sx={{marginLeft:"130px", position:"absolute" ,marginTop:'-5px',  backgroundColor:"black"}}>Add task</Button>
+
+         <Box  component="form" onSubmit={handerAdd}>
+       
+          <TextField  variant="standard"  label ="what's next?" sx={{
+            '& > :not(style)': { m: 1,width: '39ch' }, marginBottom:"20px",
+           }} name="task"/><br/>
+           <button variant="contained" className={styles.btn}>Add task</button>
+        </Box>
+        
          </div>
       </div>
       <div>
       
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style} component="form" onSubmit={handerAdd}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            ToDo List
-          </Typography>
-          <TextField  variant="standard"  sx={{
-            '& > :not(style)': { m: 1, width: '100%' }
-           }} name="task"/><br/>
-           <button className={styles.btn}>Add task</button>
-        </Box>
-      </Modal>
+   
     </div>
     </div>
 
