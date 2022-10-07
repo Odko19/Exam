@@ -1,16 +1,13 @@
-import Head from 'next/head'
-import Image from 'next/image'
+
 import styles from '../styles/Home.module.css'
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from "axios"
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { border } from '@mui/system';
+
 import useSWR from "swr";
 
 const style = {
@@ -28,8 +25,7 @@ const style = {
 export default function Home() {
   const [list, setList]=   React.useState()
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
 
 
 
@@ -44,7 +40,7 @@ export default function Home() {
   }
 
 
-  console.log(lengthArr)
+
 
   function handerAdd(e) {
     e.preventDefault();
